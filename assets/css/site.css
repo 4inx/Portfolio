@@ -221,13 +221,6 @@ section, .hero, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bot
   transition: box-shadow .35s, transform .35s;
 }
 .work-card:hover, .work-card:focus-visible { box-shadow: 0 20px 44px -26px rgba(28,25,23,.4); transform: translateY(-3px); }
-/* the one signature reveal on the site: a wipe instead of a fade,
-   reserved for the work grid since it's the page's main event */
-.js .work-card.rv { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path .85s cubic-bezier(.2,.7,.15,1); }
-.js .work-card.rv.in { clip-path: inset(0 0 0% 0); }
-.js .work-card.rv.d2.in { transition-delay: .08s; }
-.js .work-card.rv.d3.in { transition-delay: .16s; }
-@media (prefers-reduced-motion: reduce) { .js .work-card.rv { clip-path: none; } }
 .work-img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--sand-deep); }
 .work-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
 .work-card:hover .work-img img { transform: scale(1.045); }
