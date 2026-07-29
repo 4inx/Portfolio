@@ -86,6 +86,35 @@ img { max-width: 100%; display: block; }
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 210; pointer-events: none; }
 .progress i { display: block; height: 100%; background: var(--clay); transform-origin: 0 50%; transform: scaleX(0); }
 
+/* ============ SCROLL RAIL — the site's signature companion ============
+   A quiet homage to a favourite reference: a mark that travels with you
+   as you read, instead of a flat bar. Desktop only — on narrow screens
+   the top progress line already does this job, so the rail steps aside
+   rather than doubling up. Built entirely in JS/CSS so no page markup
+   needs to carry it. */
+.rail {
+  position: fixed; top: 5.5rem; bottom: 1.5rem; left: clamp(.9rem, 2.4vw, 1.8rem);
+  width: 1px; background: var(--hair); z-index: 90; pointer-events: none;
+  display: none;
+}
+@media (min-width: 1080px) and (min-height: 560px) { .rail { display: block; } }
+.rail i {
+  position: absolute; left: 50%; top: 0; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--clay); transform: translate(-50%, 0);
+  box-shadow: 0 0 0 4px var(--paper);
+}
+@media (prefers-reduced-motion: reduce) { .rail i { transition: none; } }
+
+/* ============ GRAIN — one quiet texture pass, sitewide ============
+   A faint paper tooth under everything, echoing the print metaphor
+   already central to the Reading Room. One layer, applied once. */
+.grain {
+  position: fixed; inset: 0; z-index: 205; pointer-events: none;
+  opacity: .035; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) { .grain { opacity: .05; mix-blend-mode: screen; } }
+
 /* ============ NAV ============ */
 .nav {
   position: sticky; top: 0; z-index: 100;
@@ -164,6 +193,23 @@ section, .hero, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bot
 .wing-hero .lede { margin-top: 1.5rem; max-width: 56ch; color: var(--mute); font-size: clamp(1.02rem, 1.4vw, 1.15rem); }
 .wing-hero .meta-row { display: flex; flex-wrap: wrap; gap: .5rem 2rem; margin-top: 2rem; align-items: baseline; }
 
+/* jump strip — every wing, one glance away, without crowding the top nav */
+.wing-jump {
+  display: flex; flex-wrap: wrap; gap: .4rem .3rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+  padding-top: clamp(1.25rem, 3vh, 1.75rem);
+  border-top: 1px solid var(--hair);
+}
+.wing-jump a {
+  font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; color: var(--mute);
+  padding: .4rem .75rem; border-radius: 999px;
+  border: 1px solid transparent;
+  transition: color .25s, border-color .25s, background .25s;
+}
+.wing-jump a:hover { color: var(--ink); border-color: var(--hair); }
+.wing-jump a[aria-current="page"] { color: var(--clay); background: var(--sand); border-color: var(--hair); }
+
 /* ============ THE WORK — one clean grid to all five wings ============ */
 .work-grid { display: grid; gap: clamp(1.75rem, 4vw, 2.5rem); }
 @media (min-width: 640px) { .work-grid { grid-template-columns: 1fr 1fr; } }
@@ -175,6 +221,13 @@ section, .hero, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bot
   transition: box-shadow .35s, transform .35s;
 }
 .work-card:hover, .work-card:focus-visible { box-shadow: 0 20px 44px -26px rgba(28,25,23,.4); transform: translateY(-3px); }
+/* the one signature reveal on the site: a wipe instead of a fade,
+   reserved for the work grid since it's the page's main event */
+.js .work-card.rv { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path .85s cubic-bezier(.2,.7,.15,1); }
+.js .work-card.rv.in { clip-path: inset(0 0 0% 0); }
+.js .work-card.rv.d2.in { transition-delay: .08s; }
+.js .work-card.rv.d3.in { transition-delay: .16s; }
+@media (prefers-reduced-motion: reduce) { .js .work-card.rv { clip-path: none; } }
 .work-img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--sand-deep); }
 .work-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
 .work-card:hover .work-img img { transform: scale(1.045); }

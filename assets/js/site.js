@@ -35,20 +35,42 @@
     update();
   });
 
-  /* ---------- page scroll progress ---------- */
+  /* ---------- page scroll progress + the rail companion ----------
+     One reveal, two renderings: a flat top line (always present) and,
+     on wide-enough screens, a small dot travelling a rail down the
+     margin — a quiet nod to a scroll-companion the site's author
+     admired elsewhere, redrawn in this site's own hand. Built here
+     rather than in markup so every page gets it for free. */
   var pBar = document.getElementById('pBar');
-  if (pBar) {
+  var rail = document.createElement('div');
+  rail.className = 'rail';
+  rail.setAttribute('aria-hidden', 'true');
+  var railDot = document.createElement('i');
+  rail.appendChild(railDot);
+  document.body.appendChild(rail);
+
+  if (pBar || rail) {
     var pTick = false;
     var updateP = function () {
       var h = docEl.scrollHeight - window.innerHeight;
-      pBar.style.transform = 'scaleX(' + (h > 0 ? window.scrollY / h : 0) + ')';
+      var p = h > 0 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+      if (pBar) pBar.style.transform = 'scaleX(' + p + ')';
+      var railH = rail.clientHeight;
+      if (railH) railDot.style.top = (p * railH) + 'px';
       pTick = false;
     };
     window.addEventListener('scroll', function () {
       if (!pTick) { pTick = true; requestAnimationFrame(updateP); }
     }, { passive: true });
+    window.addEventListener('resize', updateP);
     updateP();
   }
+
+  /* ---------- grain: one quiet texture layer, injected once ---------- */
+  var grain = document.createElement('div');
+  grain.className = 'grain';
+  grain.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(grain);
 
   /* ---------- lightbox (any page with .frame[data-full]) ---------- */
   var frames = Array.prototype.slice.call(document.querySelectorAll('.frame[data-full]'));
