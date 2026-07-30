@@ -253,19 +253,31 @@
     counts.forEach(function (el) { cio.observe(el); });
   }
 
-  /* ---------- hero parallax: the photo drifts slower than the scroll ---------- */
-  var heroPhoto = document.querySelector('.hero-photo img');
-  if (heroPhoto && !reduced) {
-    var hpTick = false;
-    var updateHP = function () {
-      var y = Math.min(window.scrollY, window.innerHeight);
-      heroPhoto.style.transform = 'translateY(' + (y * .18) + 'px) scale(1.08)';
-      hpTick = false;
+  /* ---------- hero parallax: three layers, three speeds ----------
+     Every [data-parallax] element inside the hero drifts at its own
+     rate (the number is a multiplier on scroll distance), so the
+     room photo, the wordmark and the cutout separate from each other
+     as you scroll — real depth, not one flat image sliding. */
+  var parallaxLayers = Array.prototype.slice.call(document.querySelectorAll('.hero [data-parallax]'));
+  if (parallaxLayers.length && !reduced) {
+    var pxTick = false;
+    var updatePX = function () {
+      var y = window.scrollY;
+      parallaxLayers.forEach(function (el) {
+        var rate = parseFloat(el.getAttribute('data-parallax')) || 0;
+        var shift = y * rate;
+        if (el.classList.contains('hero-photo')) {
+          el.style.transform = 'translateY(' + shift + 'px) scale(1.12)';
+        } else {
+          el.style.transform = 'translate(-50%,' + (-shift) + 'px)';
+        }
+      });
+      pxTick = false;
     };
     window.addEventListener('scroll', function () {
-      if (!hpTick) { hpTick = true; requestAnimationFrame(updateHP); }
+      if (!pxTick) { pxTick = true; requestAnimationFrame(updatePX); }
     }, { passive: true });
-    updateHP();
+    updatePX();
   }
 
   var yr = document.getElementById('year');

@@ -215,66 +215,94 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   margin-bottom: clamp(2.5rem, 6vh, 4rem);
 }
 
-/* ============ HERO — the photographic mode: Binx, full-bleed, in context ============ */
+/* ============ HERO — text behind subject, in front of the room ============
+   Three layers, three parallax speeds: the room photo (slowest, furthest
+   back), the wordmark (middle), Binx's cutout (fastest, closest to you) —
+   he's standing in front of his own name, which is standing in front of
+   the room. data-parallax on each layer is read by site.js. */
 .hero {
   position: relative; min-height: 100svh;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: clamp(6rem, 14vh, 9rem) clamp(1.25rem, 5vw, 4rem) clamp(2.5rem, 6vh, 4rem);
   overflow: hidden;
 }
 .hero-photo {
-  position: absolute; inset: 0; z-index: 0;
+  position: absolute; inset: -6% -6% -6% -6%; z-index: 0;
+  will-change: transform;
 }
 .hero-photo img {
   width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%;
-  filter: grayscale(.15) sepia(.12) brightness(.62) contrast(1.05);
+  filter: grayscale(.15) sepia(.12) brightness(.5) contrast(1.05) blur(1.5px);
 }
 .hero-photo::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(16,9,4,.55) 0%, rgba(16,9,4,.35) 35%, rgba(16,9,4,.92) 100%);
+  background: linear-gradient(180deg, rgba(16,9,4,.5) 0%, rgba(16,9,4,.4) 40%, rgba(16,9,4,.95) 100%);
 }
-.hero-tag { position: relative; z-index: 2; font-size: .82rem; letter-spacing: .14em; color: var(--ink); opacity: .85; margin-bottom: .75rem; }
+
+.hero-tag {
+  position: absolute; z-index: 3; top: clamp(6rem, 13vh, 8.5rem); left: clamp(1.25rem, 5vw, 4rem);
+  font-size: .82rem; letter-spacing: .14em; color: var(--ink); opacity: .85;
+}
 .hero-tag .paren { color: var(--clay); }
-.hero-mark {
-  position: relative; z-index: 2;
-  font-size: clamp(3.2rem, 12vw, 8.5rem); line-height: .88;
-  max-width: 14ch;
-}
-.hero-mark .accent { color: var(--clay); }
-.hero-intro {
-  position: relative; z-index: 2;
-  max-width: 46ch; margin-top: clamp(1.5rem, 4vh, 2.25rem);
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--ink); opacity: .82;
-}
-.hero-intro b { font-weight: 600; opacity: 1; }
-.hero-scroll {
-  position: relative; z-index: 2; display: inline-block; margin-top: clamp(1.75rem, 4.5vh, 2.5rem);
-  font-size: .78rem; letter-spacing: .12em; text-decoration: none; color: var(--ink);
-  border-bottom: 1px dashed var(--clay); padding-bottom: .2rem;
-}
 
 /* vertical sidebar label — a physical-product serial, translated to a portfolio */
 .hero-side {
-  position: absolute; z-index: 2; right: clamp(.75rem, 2.5vw, 2rem); top: 50%;
+  position: absolute; z-index: 3; right: clamp(.75rem, 2.5vw, 2rem); top: 50%;
   transform: translateY(-50%) rotate(90deg); transform-origin: center;
   font-size: .7rem; letter-spacing: .22em; color: var(--ink); opacity: .55;
   white-space: nowrap; display: none;
 }
 @media (min-width: 780px) { .hero-side { display: block; } }
 
+/* the wordmark — huge, centered, sitting behind the cutout */
+.hero-wordmark {
+  position: absolute; z-index: 1; left: 50%; top: 19%;
+  transform: translateX(-50%);
+  width: 100%; text-align: center; pointer-events: none;
+  font-size: clamp(3.1rem, 14.5vw, 10.5rem); line-height: .86; letter-spacing: -0.01em;
+  color: var(--ink); white-space: nowrap;
+  will-change: transform;
+}
+
+/* the cutout — on top of the wordmark, anchored so his head crosses it */
+.hero-cutout {
+  position: absolute; z-index: 2; left: 50%; top: 12%;
+  transform: translateX(-50%);
+  width: clamp(230px, 31vw, 430px); height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 40px 70px rgba(0,0,0,.5)) saturate(.92) sepia(.08);
+  will-change: transform;
+}
+
+/* intro + scroll cue, pinned to the foot of the hero */
+.hero-foot {
+  position: absolute; z-index: 3; left: clamp(1.25rem, 5vw, 4rem); right: clamp(1.25rem, 5vw, 4rem);
+  bottom: clamp(6.5rem, 15vh, 9.5rem);
+}
+.hero-intro {
+  max-width: 46ch;
+  font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--ink); opacity: .85;
+}
+.hero-intro b { font-weight: 600; opacity: 1; }
+.hero-scroll {
+  display: inline-block; margin-top: clamp(1.25rem, 3vh, 1.75rem);
+  font-size: .78rem; letter-spacing: .12em; text-decoration: none; color: var(--ink);
+  border-bottom: 1px dashed var(--clay); padding-bottom: .2rem;
+}
+
 /* credit card, lower-left, dashed divider inside */
 .hero-card {
-  position: relative; z-index: 2; margin-top: clamp(2rem, 5vh, 3rem);
-  max-width: 34ch; padding: 1.1rem 1.25rem;
-  background: rgba(16, 9, 4, .55); border: 1px solid var(--hair); border-radius: 12px;
+  position: absolute; z-index: 3; left: clamp(1.25rem, 5vw, 4rem); bottom: clamp(1.5rem, 4vh, 2.5rem);
+  max-width: 30ch; padding: 1rem 1.15rem;
+  background: rgba(16, 9, 4, .6); border: 1px solid var(--hair); border-radius: 12px;
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: none;
 }
+@media (min-width: 640px) { .hero-card { display: block; } }
 .hero-card .label { display: block; margin-bottom: .6rem; }
-.hero-card p { font-size: .88rem; color: var(--ink); opacity: .8; padding-top: .6rem; border-top: 1px dashed var(--hair); }
+.hero-card p { font-size: .86rem; color: var(--ink); opacity: .8; padding-top: .6rem; border-top: 1px dashed var(--hair); }
 
 /* video thumbnail, lower-right */
 .hero-video {
-  position: absolute; z-index: 2; right: clamp(1.25rem, 5vw, 4rem); bottom: clamp(2.5rem, 6vh, 4rem);
+  position: absolute; z-index: 3; right: clamp(1.25rem, 5vw, 4rem); bottom: clamp(1.5rem, 4vh, 2.5rem);
   width: clamp(96px, 12vw, 150px); aspect-ratio: 16/10;
   border: 1px solid var(--hair); border-radius: 12px; overflow: hidden;
   text-decoration: none; display: none;
@@ -298,18 +326,19 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   font-size: .58rem; letter-spacing: .12em; color: var(--ink);
 }
 
-/* ============ THE WORK — five artifacts, one void-mode reveal each ============ */
+/* ============ THE WORK — five artifacts, close together ============
+   Compact by request: no full-viewport-per-wing spacing, and the
+   artifact itself is the biggest thing in the row. */
 .reveal-section {
-  min-height: 100svh; display: flex; align-items: center;
   border-top: 1px dashed var(--hair);
-  padding-top: clamp(3rem, 8vh, 5rem); padding-bottom: clamp(3rem, 8vh, 5rem);
+  padding-top: clamp(1.75rem, 3.5vh, 2.5rem); padding-bottom: clamp(1.75rem, 3.5vh, 2.5rem);
 }
 .reveal-grid {
-  width: 100%; display: grid; gap: clamp(1.75rem, 4vw, 2.5rem); align-items: center;
+  width: 100%; display: grid; gap: clamp(1.5rem, 3vw, 2rem); align-items: center;
 }
-@media (min-width: 900px) { .reveal-grid { grid-template-columns: 1.1fr 1.4fr 1.1fr; } }
+@media (min-width: 900px) { .reveal-grid { grid-template-columns: .8fr 1.7fr .8fr; } }
 .reveal-copy-l { order: 1; }
-.reveal-figure { order: 2; justify-self: center; width: 100%; max-width: 460px; }
+.reveal-figure { order: 2; justify-self: center; width: 100%; max-width: 720px; }
 .reveal-copy-r { order: 3; }
 @media (min-width: 900px) {
   .reveal-copy-l { text-align: left; }
