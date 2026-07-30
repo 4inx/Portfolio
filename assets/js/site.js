@@ -253,14 +253,18 @@
     counts.forEach(function (el) { cio.observe(el); });
   }
 
-  /* ---------- hero parallax: lerped every frame, not snapped per event ----------
-     Raw scroll events fire in uneven, sometimes-large jumps — mapping a
-     transform straight to scrollY makes the layers snap instead of glide,
-     and a fast flick can skip past the effect almost entirely. Instead,
-     each [data-parallax] layer eases toward its target position on every
-     animation frame, so the motion stays smooth regardless of how choppy
-     the input is, and keeps gliding for a few frames after a fast scroll
-     rather than stopping dead. */
+  /* ---------- hero parallax v2 ----------
+     The previous version lerped correctly but still read as clunky —
+     the actual cause: .hero-wordmark/.hero-cutout carried the shared
+     .rv class, which leaves `transition: transform .7s` permanently
+     attached (see the .rv.in rule). Every time this loop set a new
+     inline transform, the browser eased toward it over 0.7s on top of
+     the lerp already happening here — two smoothing systems fighting,
+     which is what "clunky" actually was. Fixed at the source: those
+     two elements no longer use .rv at all (see index.html), so
+     nothing but this loop ever touches their transform. Also switched
+     to translate3d for a guaranteed GPU compositing layer, and a
+     tighter lerp so it reads as smooth rather than sluggish. */
   var parallaxLayers = Array.prototype.slice.call(document.querySelectorAll('.hero [data-parallax]')).map(function (el) {
     return { el: el, rate: parseFloat(el.getAttribute('data-parallax')) || 0, current: 0 };
   });
@@ -272,9 +276,9 @@
       parallaxLayers.forEach(function (s) {
         var target = y * s.rate;
         var diff = target - s.current;
-        if (Math.abs(diff) > 0.05) { s.current += diff * 0.1; settled = false; }
+        if (Math.abs(diff) > 0.05) { s.current += diff * 0.22; settled = false; }
         else { s.current = target; }
-        s.el.style.transform = 'translate(-50%,' + (-s.current) + 'px)';
+        s.el.style.transform = 'translate3d(-50%,' + (-s.current) + 'px,0)';
       });
       if (!settled) { requestAnimationFrame(pxLoop); } else { pxRunning = false; }
     };

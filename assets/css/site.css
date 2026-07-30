@@ -246,17 +246,24 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 /* the wordmark — huge, centered, sitting behind the cutout */
 .hero-wordmark {
   position: absolute; z-index: 1; left: 50%; top: 19%;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, 0, 0);
   width: 100%; text-align: center; pointer-events: none;
-  font-size: clamp(3.1rem, 14.5vw, 10.5rem); line-height: .86; letter-spacing: -0.01em;
+  font-size: clamp(4rem, 19vw, 14rem); line-height: .84; letter-spacing: -0.01em;
   color: var(--ink); white-space: nowrap;
   will-change: transform;
 }
 
+/* opacity-only entrance for the two parallax-driven layers — see the
+   markup comment for why these can't use the shared .rv system */
+.hero-fade { opacity: 0; }
+.js .hero-fade { animation: heroFadeIn 1s ease .25s forwards; }
+@keyframes heroFadeIn { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-fade { opacity: 1; animation: none; } }
+
 /* the cutout — on top of the wordmark, anchored so his head crosses it */
 .hero-cutout {
   position: absolute; z-index: 2; left: 50%; top: 12%;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, 0, 0);
   width: clamp(230px, 31vw, 430px); height: auto;
   pointer-events: none;
   filter: drop-shadow(0 40px 70px rgba(0,0,0,.5)) saturate(.92) sepia(.08);
