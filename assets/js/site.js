@@ -136,6 +136,138 @@
     loops.forEach(function (v) { vio.observe(v); });
   }
 
+  /* ==========================================================
+     MOTION — cursor, tilt, magnetic pull, scroll rotation, counters,
+     hero parallax. Every effect here only ADDS movement on top of
+     content that is already visible by normal means; none of them
+     is allowed to be the reason something can't be seen. Skipped
+     entirely for touch pointers and reduced-motion. */
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+  var motionOK = finePointer && !reduced;
+
+  /* ---------- cursor: an ember ring, morphing over artifacts ---------- */
+  if (motionOK) {
+    docEl.classList.add('has-cursor');
+    var cursor = document.createElement('div');
+    cursor.className = 'cursor';
+    cursor.innerHTML = '<span class="cta"></span>';
+    cursor.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(cursor);
+    var cta = cursor.querySelector('.cta');
+    var cx = -100, cy = -100, tx = -100, ty = -100, shown = false;
+    window.addEventListener('mousemove', function (e) {
+      tx = e.clientX; ty = e.clientY;
+      if (!shown) { shown = true; cursor.classList.add('on'); cx = tx; cy = ty; }
+    }, { passive: true });
+    (function cLoop() {
+      cx += (tx - cx) * .25; cy += (ty - cy) * .25;
+      cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+      requestAnimationFrame(cLoop);
+    })();
+    document.addEventListener('mouseover', function (e) {
+      var t = e.target.closest('[data-cursor]');
+      if (t) {
+        cursor.classList.add('big');
+        cta.textContent = t.getAttribute('data-cursor') === 'enter' ? 'ENTER' : 'VIEW';
+      } else {
+        cursor.classList.remove('big');
+      }
+    });
+    document.addEventListener('mouseleave', function () { cursor.classList.remove('on'); shown = false; });
+  }
+
+  /* ---------- tilt: every .frame and reveal artifact leans toward the pointer ---------- */
+  if (motionOK) {
+    document.querySelectorAll('.frame, .reveal-figure .frame-shell').forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - .5;
+        var py = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = 'perspective(900px) rotateX(' + (py * -10) + 'deg) rotateY(' + (px * 10) + 'deg)';
+      });
+      el.addEventListener('mouseleave', function () {
+        el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  }
+
+  /* ---------- magnetic pull: the CTA and next-wing links lean in ---------- */
+  if (motionOK) {
+    document.querySelectorAll('.btn-primary, .hero-scroll, .wing-next a').forEach(function (el) {
+      el.addEventListener('mousemove', function (e) {
+        var r = el.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width / 2)) * .28;
+        var dy = (e.clientY - (r.top + r.height / 2)) * .28;
+        el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      });
+      el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+    });
+  }
+
+  /* ---------- scroll-linked rotation: reveal figures turn as they pass ---------- */
+  var revealFigures = document.querySelectorAll('.reveal-figure .frame-shell');
+  if (revealFigures.length && !reduced) {
+    var rotTick = false;
+    var updateRot = function () {
+      var vh = window.innerHeight;
+      revealFigures.forEach(function (el) {
+        var section = el.closest('.reveal-section') || el;
+        var r = section.getBoundingClientRect();
+        var center = r.top + r.height / 2;
+        var p = Math.max(-1, Math.min(1, (center - vh / 2) / (vh / 2)));
+        el.style.setProperty('--scrollY', (p * -6) + 'deg');
+      });
+      rotTick = false;
+    };
+    /* only apply the ambient scroll rotation when the pointer isn't actively tilting */
+    var ambientCSS = document.createElement('style');
+    ambientCSS.textContent = '.reveal-figure .frame-shell:not(:hover) { transform: perspective(900px) rotateY(var(--scrollY, 0deg)) !important; }';
+    document.head.appendChild(ambientCSS);
+    window.addEventListener('scroll', function () {
+      if (!rotTick) { rotTick = true; requestAnimationFrame(updateRot); }
+    }, { passive: true });
+    updateRot();
+  }
+
+  /* ---------- count-up: piece totals tick up when revealed ---------- */
+  var counts = document.querySelectorAll('[data-count]');
+  if (counts.length) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        var el = e.target, target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        var b = el.querySelector('b');
+        if (!b) return;
+        if (reduced) { b.textContent = target; return; }
+        var start = null, dur = 900;
+        var step = function (ts) {
+          if (start === null) start = ts;
+          var p = Math.min(1, (ts - start) / dur);
+          b.textContent = Math.round(p * target);
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.4 });
+    counts.forEach(function (el) { cio.observe(el); });
+  }
+
+  /* ---------- hero parallax: the photo drifts slower than the scroll ---------- */
+  var heroPhoto = document.querySelector('.hero-photo img');
+  if (heroPhoto && !reduced) {
+    var hpTick = false;
+    var updateHP = function () {
+      var y = Math.min(window.scrollY, window.innerHeight);
+      heroPhoto.style.transform = 'translateY(' + (y * .18) + 'px) scale(1.08)';
+      hpTick = false;
+    };
+    window.addEventListener('scroll', function () {
+      if (!hpTick) { hpTick = true; requestAnimationFrame(updateHP); }
+    }, { passive: true });
+    updateHP();
+  }
+
   var yr = document.getElementById('year');
   if (yr) yr.textContent = new Date().getFullYear();
 })();

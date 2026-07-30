@@ -10,6 +10,13 @@
    to one dark world on purpose — no light/dark toggle here.
    ============================================================ */
 
+/* Cross-document view transitions: a smooth cross-fade between pages in
+   browsers that support it (Chrome/Edge 126+), a plain instant navigation
+   everywhere else. One rule, whole site, zero JS. */
+@view-transition {
+  navigation: auto;
+}
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -114,6 +121,58 @@ img, video { max-width: 100%; display: block; }
   box-shadow: 0 0 0 4px var(--paper);
 }
 @media (prefers-reduced-motion: reduce) { .rail i { transition: none; } }
+
+/* ============ CURSOR — an ember ring that morphs over artifacts ============
+   Pure addition, never load-bearing: the native cursor stays usable the
+   whole time underneath. Fine-pointer + motion-ok only. */
+.cursor {
+  position: fixed; left: 0; top: 0; z-index: 240; pointer-events: none;
+  width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px;
+  border: 1px solid var(--clay); border-radius: 50%;
+  display: none; opacity: 0;
+  transition: width .25s cubic-bezier(.2,.7,.2,1), height .25s cubic-bezier(.2,.7,.2,1),
+              margin .25s cubic-bezier(.2,.7,.2,1), opacity .2s, background .25s;
+  will-change: transform;
+}
+.cursor.on { opacity: 1; }
+.js.has-cursor .cursor { display: block; }
+.cursor .cta {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: .58rem; letter-spacing: .1em; color: var(--paper);
+  opacity: 0; transition: opacity .2s;
+}
+.cursor.big {
+  width: 58px; height: 58px; margin: -29px 0 0 -29px;
+  background: var(--clay); border-color: var(--clay);
+}
+.cursor.big .cta { opacity: 1; }
+@media (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor { display: none !important; } }
+
+/* ============ TILT — every artifact rotates gently toward you ============
+   Base transform + transition live on .frame itself and on
+   .reveal-figure .frame-shell (below); this just kills the motion
+   for anyone who asked for less of it. */
+@media (prefers-reduced-motion: reduce) { .frame, .frame-shell { transition: none !important; } }
+
+/* ============ MAGNETIC — the CTA leans toward the cursor ============ */
+.btn-primary, .hero-scroll, .wing-next a {
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), background .25s;
+  display: inline-block;
+}
+
+/* ============ MARQUEE — one energetic beat between hero and work ============ */
+.marquee {
+  overflow: hidden; white-space: nowrap;
+  border-top: 1px dashed var(--hair); border-bottom: 1px dashed var(--hair);
+  padding: .9rem 0;
+}
+.marquee .track { display: inline-block; animation: marquee 22s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .marquee .track { animation: none; } }
+.marquee span {
+  font-size: .82rem; letter-spacing: .16em; padding: 0 1.1rem; color: var(--ink); opacity: .7;
+}
+.marquee span.hi { color: var(--clay); opacity: 1; }
+@keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ============ GRAIN — one quiet texture pass, sitewide ============ */
 .grain {
@@ -269,7 +328,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   background: var(--sand); transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .3s;
 }
 .reveal-figure img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.reveal-figure a:hover .frame-shell { transform: translateY(-4px); border-color: var(--clay); }
+.reveal-figure a:hover .frame-shell { border-color: var(--clay); }
 .reveal-figure a:hover img { transform: scale(1.03); }
 
 /* ============ WING HERO (subpages) ============ */
@@ -327,7 +386,8 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   position: relative; display: block; width: 100%;
   background: var(--sand); border: 1px solid var(--hair); border-radius: 10px;
   overflow: hidden; cursor: pointer; padding: 0;
-  transition: border-color .3s;
+  transition: border-color .3s, transform .5s cubic-bezier(.2,.7,.2,1);
+  transform: perspective(900px) rotateX(0deg) rotateY(0deg);
   font: inherit; color: inherit; text-align: inherit;
 }
 .frame img { width: 100%; height: auto; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
@@ -477,7 +537,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   padding: 1rem 2rem; border-radius: 36px;
   transition: background .25s, transform .25s;
 }
-.btn-primary:hover { background: var(--sand-deep); transform: translateY(-2px); }
+.btn-primary:hover { background: var(--sand-deep); }
 
 .socials { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.1rem 2.2rem; margin-top: clamp(2.25rem, 5vh, 3.25rem); }
 .socials a {
