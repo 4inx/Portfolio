@@ -53,15 +53,8 @@
   </a>
 </header>
 
-<div class="marquee" aria-hidden="true">
-  <div class="track">
-    <span>BRAND</span><span class="hi">·</span>
-    <span>PRINT</span><span class="hi">·</span>
-    <span>WEB</span><span class="hi">·</span>
-    <span>SOCIAL</span><span class="hi">·</span>
-    <span>FILM</span><span class="hi">·</span>
-    <span>AI-ASSISTED</span><span class="hi">·</span>
-    <span>ONE VOICE</span><span class="hi">—</span>
+<div class="marquee" id="marquee" aria-hidden="true">
+  <div class="track" id="marqueeTrack">
     <span>BRAND</span><span class="hi">·</span>
     <span>PRINT</span><span class="hi">·</span>
     <span>WEB</span><span class="hi">·</span>
@@ -72,7 +65,7 @@
   </div>
 </div>
 
-<!-- ================= THE WORK — five artifacts, one reveal each ================= -->
+<!-- ================= THE WORK — a horizontal walk past five artifacts ================= -->
 <section id="work" style="padding:0; border-top: 1px dashed var(--hair);">
   <div class="wrap" style="padding-top: clamp(3.5rem,9vh,6rem); padding-bottom: 0;">
     <div class="rule-head rv" style="border-top:none; padding-top:0;">
@@ -81,92 +74,76 @@
     </div>
   </div>
 
-  <div class="reveal-section">
-    <div class="wrap reveal-grid">
-      <div class="reveal-copy-l rv">
-        <span class="reveal-kicker">Wing I — Property</span>
-        <h2 class="reveal-heading">Sells the property.</h2>
-        <span class="reveal-count" data-count="10"><b>0</b> pieces</span>
-      </div>
-      <figure class="reveal-figure rv d2">
-        <a href="property.html" aria-label="Enter the Property Wing">
-          <div class="frame-shell"><img src="assets/img/listings/snowridge-01.jpg" alt="Listing presentation cover: 2582 Snowridge Cres over a dark aerial of Whistler's ski runs, headlined 1-in-100" loading="eager"></div>
-        </a>
-      </figure>
-      <div class="reveal-copy-r rv d3">
-        <p class="voice">Listing presentations, marketing visions and investment packages — three ways to argue for a property, all for Sea 2 Sky Living.</p>
-      </div>
-    </div>
-  </div>
+  <div class="work-outer" id="workOuter">
+    <div class="work-sticky">
+      <div class="work-track" id="workTrack">
 
-  <div class="reveal-section">
-    <div class="wrap reveal-grid">
-      <div class="reveal-copy-l rv">
-        <span class="reveal-kicker">Wing II — Reading</span>
-        <h2 class="reveal-heading">Ink, paper, inboxes.</h2>
-        <span class="reveal-count" data-count="9"><b>0</b> pieces</span>
-      </div>
-      <figure class="reveal-figure rv d2">
-        <a href="reading.html" aria-label="Enter the Reading Room">
-          <div class="frame-shell"><img src="assets/img/print/trifold-whistler-1.jpg" alt="Whistler tri-fold brochure panels: client testimonials over an alpine panorama with the Rob Palm wordmark" loading="lazy"></div>
-        </a>
-      </figure>
-      <div class="reveal-copy-r rv d3">
-        <p class="voice">Brochures, greeting cards and the publications that land in inboxes — written and designed by the same hand.</p>
-      </div>
-    </div>
-  </div>
+        <article class="work-panel">
+          <a class="work-panel-figure" href="property.html" data-cursor="enter" aria-label="Enter the Property Wing">
+            <div class="frame-shell"><img src="assets/img/listings/snowridge-01.jpg" alt="Listing presentation cover: 2582 Snowridge Cres over a dark aerial of Whistler's ski runs, headlined 1-in-100" loading="eager"></div>
+          </a>
+          <div class="work-panel-copy">
+            <span class="reveal-kicker">Wing I — Property</span>
+            <h2 class="reveal-heading">Sells the property.</h2>
+            <p class="voice">Listing presentations, marketing visions and investment packages — three ways to argue for a property, all for Sea 2 Sky Living.</p>
+            <span class="reveal-count" data-count="10"><b>0</b> pieces</span>
+          </div>
+        </article>
 
-  <div class="reveal-section">
-    <div class="wrap reveal-grid">
-      <div class="reveal-copy-l rv">
-        <span class="reveal-kicker">Wing III — Campaigns</span>
-        <h2 class="reveal-heading">Hung in posting order.</h2>
-        <span class="reveal-count" data-count="13"><b>0</b> pieces</span>
-      </div>
-      <figure class="reveal-figure rv d2">
-        <a href="campaigns.html" aria-label="Enter the Campaign Wall">
-          <div class="frame-shell"><img src="assets/img/social/late-may-1.jpg" alt="Instagram carousel cover: Late May in the Sea to Sky — layered mountain photography with bold retro type" loading="lazy"></div>
-        </a>
-      </figure>
-      <div class="reveal-copy-r rv d3">
-        <p class="voice">Social campaigns shown the way they shipped, slide by slide — plus a property film as the feature presentation.</p>
-      </div>
-    </div>
-  </div>
+        <article class="work-panel">
+          <a class="work-panel-figure" href="reading.html" data-cursor="enter" aria-label="Enter the Reading Room">
+            <div class="frame-shell"><img src="assets/img/print/trifold-whistler-1.jpg" alt="Whistler tri-fold brochure panels: client testimonials over an alpine panorama with the Rob Palm wordmark" loading="lazy"></div>
+          </a>
+          <div class="work-panel-copy">
+            <span class="reveal-kicker">Wing II — Reading</span>
+            <h2 class="reveal-heading">Ink, paper, inboxes.</h2>
+            <p class="voice">Brochures, greeting cards and the publications that land in inboxes — written and designed by the same hand.</p>
+            <span class="reveal-count" data-count="9"><b>0</b> pieces</span>
+          </div>
+        </article>
 
-  <div class="reveal-section">
-    <div class="wrap reveal-grid">
-      <div class="reveal-copy-l rv">
-        <span class="reveal-kicker">Wing IV — Web</span>
-        <h2 class="reveal-heading">Nothing mocked.</h2>
-        <span class="reveal-count" data-count="3"><b>0</b> pieces · all live</span>
-      </div>
-      <figure class="reveal-figure rv d2">
-        <a href="web.html" aria-label="Enter the Web Wing">
-          <div class="frame-shell"><img src="assets/img/social/onboarding-post-1.jpg" alt="The live onboarding page shown in its launch post: 'We just made it easier to contact us'" loading="lazy"></div>
-        </a>
-      </figure>
-      <div class="reveal-copy-r rv d3">
-        <p class="voice">Pages I conceived, designed and shipped — idea to production, without waiting on a dev queue.</p>
-      </div>
-    </div>
-  </div>
+        <article class="work-panel">
+          <a class="work-panel-figure" href="campaigns.html" data-cursor="enter" aria-label="Enter the Campaign Wall">
+            <div class="frame-shell"><img src="assets/img/social/late-may-1.jpg" alt="Instagram carousel cover: Late May in the Sea to Sky — layered mountain photography with bold retro type" loading="lazy"></div>
+          </a>
+          <div class="work-panel-copy">
+            <span class="reveal-kicker">Wing III — Campaigns</span>
+            <h2 class="reveal-heading">Hung in posting order.</h2>
+            <p class="voice">Social campaigns shown the way they shipped, slide by slide — plus a property film as the feature presentation.</p>
+            <span class="reveal-count" data-count="13"><b>0</b> pieces</span>
+          </div>
+        </article>
 
-  <div class="reveal-section" style="border-bottom: 1px dashed var(--hair);">
-    <div class="wrap reveal-grid">
-      <div class="reveal-copy-l rv">
-        <span class="reveal-kicker">Wing V — Annex</span>
-        <h2 class="reveal-heading">The passion wing.</h2>
-        <span class="reveal-count" data-count="5"><b>0</b> pieces</span>
+        <article class="work-panel">
+          <a class="work-panel-figure" href="web.html" data-cursor="enter" aria-label="Enter the Web Wing">
+            <div class="frame-shell"><img src="assets/img/social/onboarding-post-1.jpg" alt="The live onboarding page shown in its launch post: 'We just made it easier to contact us'" loading="lazy"></div>
+          </a>
+          <div class="work-panel-copy">
+            <span class="reveal-kicker">Wing IV — Web</span>
+            <h2 class="reveal-heading">Nothing mocked.</h2>
+            <p class="voice">Pages I conceived, designed and shipped — idea to production, without waiting on a dev queue.</p>
+            <span class="reveal-count" data-count="3"><b>0</b> pieces · all live</span>
+          </div>
+        </article>
+
+        <article class="work-panel">
+          <a class="work-panel-figure" href="annex.html" data-cursor="enter" aria-label="Enter the Annex">
+            <div class="frame-shell"><img src="assets/img/annex/thumb-paradox-unstoppable.jpg" alt="YouTube thumbnail: The Unstoppable Paradox — a Deadlock character in a trench coat against a dark city" loading="lazy"></div>
+          </a>
+          <div class="work-panel-copy">
+            <span class="reveal-kicker">Wing V — Annex</span>
+            <h2 class="reveal-heading">The passion wing.</h2>
+            <p class="voice">A channel motion identity and thumbnail craft from the video-game lane — kept sharp because I love it.</p>
+            <span class="reveal-count" data-count="5"><b>0</b> pieces</span>
+          </div>
+        </article>
+
       </div>
-      <figure class="reveal-figure rv d2">
-        <a href="annex.html" aria-label="Enter the Annex">
-          <div class="frame-shell"><img src="assets/img/annex/thumb-paradox-unstoppable.jpg" alt="YouTube thumbnail: The Unstoppable Paradox — a Deadlock character in a trench coat against a dark city" loading="lazy"></div>
-        </a>
-      </figure>
-      <div class="reveal-copy-r rv d3">
-        <p class="voice">A channel motion identity and thumbnail craft from the video-game lane — kept sharp because I love it.</p>
+
+      <div class="work-progress">
+        <span class="label">Scroll to explore</span>
+        <div class="work-progress-track"><i id="workProgressBar"></i></div>
+        <span class="label count"><b id="workNow">01</b> / <span id="workTotal">05</span></span>
       </div>
     </div>
   </div>

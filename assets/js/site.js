@@ -18,6 +18,47 @@
     if (reduced) { el.classList.add('in'); } else { io.observe(el); }
   });
 
+  /* ---------- marquee: measured in real pixels, correct at any width ----------
+     The old version used a CSS translateX(-50%) keyframe, which only loops
+     seamlessly if the duplicated content happens to be wider than the
+     viewport — on a wide screen with short content it silently ran out,
+     leaving a visible gap of nothing at the end of each cycle. Fixed by
+     measuring one copy's real pixel width, duplicating it as many times
+     as needed to safely overflow the widest expected viewport, and
+     animating by exactly that measured width via the Web Animations API
+     — mathematically seamless regardless of screen size or content length. */
+  var marquee = document.getElementById('marquee');
+  var marqueeTrack = document.getElementById('marqueeTrack');
+  if (marquee && marqueeTrack) {
+    var setupMarquee = function () {
+      var base = marqueeTrack.getAttribute('data-base');
+      if (base === null) { base = marqueeTrack.innerHTML; marqueeTrack.setAttribute('data-base', base); }
+      marqueeTrack.innerHTML = base;
+      var oneWidth = marqueeTrack.scrollWidth;
+      if (!oneWidth) return;
+      var minWidth = window.innerWidth * 2 + oneWidth;
+      var guard = 0;
+      while (marqueeTrack.scrollWidth < minWidth && guard < 20) {
+        marqueeTrack.insertAdjacentHTML('beforeend', base);
+        guard++;
+      }
+      if (marquee._anim) marquee._anim.cancel();
+      if (reduced) return;
+      var pxPerSecond = 70;
+      marquee._anim = marqueeTrack.animate(
+        [{ transform: 'translateX(0)' }, { transform: 'translateX(-' + oneWidth + 'px)' }],
+        { duration: (oneWidth / pxPerSecond) * 1000, iterations: Infinity, easing: 'linear' }
+      );
+    };
+    setupMarquee();
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(setupMarquee); }
+    var marqueeResize;
+    window.addEventListener('resize', function () {
+      clearTimeout(marqueeResize);
+      marqueeResize = setTimeout(setupMarquee, 250);
+    });
+  }
+
   /* ---------- flip-through strips (wings) ---------- */
   document.querySelectorAll('.strip-shell').forEach(function (shell) {
     var strip = shell.querySelector('.strip');
@@ -176,9 +217,9 @@
     document.addEventListener('mouseleave', function () { cursor.classList.remove('on'); shown = false; });
   }
 
-  /* ---------- tilt: every .frame and reveal artifact leans toward the pointer ---------- */
+  /* ---------- tilt: every .frame and artifact leans toward the pointer ---------- */
   if (motionOK) {
-    document.querySelectorAll('.frame, .reveal-figure .frame-shell').forEach(function (el) {
+    document.querySelectorAll('.frame, .frame-shell').forEach(function (el) {
       el.addEventListener('mousemove', function (e) {
         var r = el.getBoundingClientRect();
         var px = (e.clientX - r.left) / r.width - .5;
@@ -204,29 +245,69 @@
     });
   }
 
-  /* ---------- scroll-linked rotation: reveal figures turn as they pass ---------- */
-  var revealFigures = document.querySelectorAll('.reveal-figure .frame-shell');
-  if (revealFigures.length && !reduced) {
-    var rotTick = false;
-    var updateRot = function () {
-      var vh = window.innerHeight;
-      revealFigures.forEach(function (el) {
-        var section = el.closest('.reveal-section') || el;
-        var r = section.getBoundingClientRect();
-        var center = r.top + r.height / 2;
-        var p = Math.max(-1, Math.min(1, (center - vh / 2) / (vh / 2)));
-        el.style.setProperty('--scrollY', (p * -6) + 'deg');
-      });
-      rotTick = false;
+  /* ---------- the work section: sticky-pinned horizontal walk ----------
+     Reference pattern: pin the section to the viewport for exactly as
+     much scroll distance as the row of panels needs, and translate the
+     row sideways in proportion to how far through that pinned range the
+     user has scrolled — release the pin once the row is fully walked.
+     This is the same sticky+scrubbed-transform technique used across the
+     agency/portfolio sites this design draws from. Position is *scrubbed*
+     (driven directly by scroll position every frame) rather than lerped,
+     because a lerp here would mean the panels visibly lag behind a pin
+     that's supposed to feel exactly 1:1 with the scrollbar; a lerp is
+     right for the hero parallax (a background effect) but wrong for a
+     mechanism the user is supposed to feel is *directly* under their
+     scroll. Falls back to a plain native horizontal scroll-snap carousel
+     on touch, narrow, or reduced-motion — never scroll-jacks a finger. */
+  var workOuter = document.getElementById('workOuter');
+  var workTrack = document.getElementById('workTrack');
+  if (workOuter && workTrack) {
+    var workPanels = workTrack.querySelectorAll('.work-panel');
+    var workTotalEl = document.getElementById('workTotal');
+    var workNowEl = document.getElementById('workNow');
+    var workBar = document.getElementById('workProgressBar');
+    if (workTotalEl) workTotalEl.textContent = String(workPanels.length).padStart(2, '0');
+
+    var workEnhanced = false, workRaf = null;
+    var setWorkProgress = function (p) {
+      p = Math.max(0, Math.min(1, p));
+      if (workBar) workBar.style.left = (p * 100) + '%';
+      if (workNowEl && workPanels.length) workNowEl.textContent = String(1 + Math.round(p * (workPanels.length - 1))).padStart(2, '0');
     };
-    /* only apply the ambient scroll rotation when the pointer isn't actively tilting */
-    var ambientCSS = document.createElement('style');
-    ambientCSS.textContent = '.reveal-figure .frame-shell:not(:hover) { transform: perspective(900px) rotateY(var(--scrollY, 0deg)) !important; }';
-    document.head.appendChild(ambientCSS);
-    window.addEventListener('scroll', function () {
-      if (!rotTick) { rotTick = true; requestAnimationFrame(updateRot); }
+    var workMaxShift = function () { return Math.max(0, workTrack.scrollWidth - workTrack.clientWidth); };
+    var sizeWorkOuter = function () { workOuter.style.height = (window.innerHeight + workMaxShift()) + 'px'; };
+
+    var workLoop = function () {
+      var travel = workOuter.offsetHeight - window.innerHeight;
+      var top = workOuter.getBoundingClientRect().top;
+      var p = travel > 0 ? Math.max(0, Math.min(1, -top / travel)) : 0;
+      workTrack.style.transform = 'translate3d(' + (-(p * workMaxShift())) + 'px,0,0)';
+      setWorkProgress(p);
+      workRaf = requestAnimationFrame(workLoop);
+    };
+
+    var applyWorkMode = function () {
+      var want = window.innerWidth >= 860 && !reduced && window.matchMedia('(pointer: fine)').matches;
+      if (want === workEnhanced) { if (workEnhanced) sizeWorkOuter(); return; }
+      workEnhanced = want;
+      if (workEnhanced) {
+        workOuter.classList.add('enhanced');
+        sizeWorkOuter();
+        if (!workRaf) workLoop();
+      } else {
+        workOuter.classList.remove('enhanced');
+        workOuter.style.height = '';
+        workTrack.style.transform = '';
+        if (workRaf) { cancelAnimationFrame(workRaf); workRaf = null; }
+      }
+    };
+    applyWorkMode();
+    window.addEventListener('resize', applyWorkMode);
+    window.addEventListener('load', applyWorkMode);
+    workTrack.addEventListener('scroll', function () {
+      if (!workEnhanced) setWorkProgress(workMaxShift() > 0 ? workTrack.scrollLeft / workMaxShift() : 0);
     }, { passive: true });
-    updateRot();
+    if (!workEnhanced) setWorkProgress(0);
   }
 
   /* ---------- count-up: piece totals tick up when revealed ---------- */
