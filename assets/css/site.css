@@ -531,6 +531,19 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 @media (min-width: 700px) { .bumpers { grid-template-columns: 1fr 1fr; } }
 .bumper { border-radius: 12px; overflow: hidden; border: 1px solid var(--hair); background: #000; }
 .bumper video { display: block; width: 100%; height: auto; }
+
+/* vertical/social video pairs — capped narrower than .screen-main since
+   these are 9:16, not 16:9, and would otherwise tower over the page */
+.game-clips {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem); margin-top: clamp(2rem, 5vh, 3rem);
+}
+.game-clip { width: min(100%, 380px); }
+.game-clip video {
+  display: block; width: 100%; height: auto; border-radius: 12px;
+  border: 1px solid var(--hair); background: #000;
+}
+.game-clip figcaption { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: .7rem; }
 .after-hours {
   margin-top: clamp(2.5rem, 6vh, 4rem); display: flex; flex-wrap: wrap;
   justify-content: center; align-items: flex-end; gap: clamp(1.5rem, 4vw, 2.5rem);
