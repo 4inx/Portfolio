@@ -220,6 +220,17 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   margin-bottom: clamp(2.5rem, 6vh, 4rem);
 }
 
+/* the arms-out photo greeting the work walk — hidden below the breakpoint
+   where there's no real room for it beside the section label */
+.work-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+.work-intro .rule-head { flex: 1 1 auto; }
+.work-intro-figure {
+  display: none; height: clamp(140px, 16vw, 220px); width: auto;
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 18px 26px rgba(0,0,0,.45));
+}
+@media (min-width: 860px) { .work-intro-figure { display: block; } }
+
 /* ============ HERO — text behind subject, in front of the room ============
    Three layers, three parallax speeds: the room photo (slowest, furthest
    back), the wordmark (middle), Binx's cutout (fastest, closest to you) —
