@@ -229,7 +229,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 }
 @media (min-width: 860px) { .work-intro-figure-wrap { display: block; } }
 .work-intro-figure {
-  display: block; height: clamp(190px, 21vw, 300px); width: auto;
+  display: block; height: clamp(218px, 24vw, 345px); width: auto;
   transform: rotate(-4deg);
   filter: drop-shadow(0 18px 26px rgba(0,0,0,.45));
 }
