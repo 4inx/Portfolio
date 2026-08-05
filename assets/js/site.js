@@ -90,6 +90,16 @@
     prevBtn.addEventListener('click', function () { strip.scrollBy({ left: -step(), behavior: 'smooth' }); });
     nextBtn.addEventListener('click', function () { strip.scrollBy({ left: step(), behavior: 'smooth' }); });
 
+    /* hovering the strip turns the mouse wheel into horizontal scroll,
+       so a plain scroll wheel (not just a trackpad) can flip through it */
+    viewport.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already-horizontal gesture: let it through
+      var max = strip.scrollWidth - strip.clientWidth;
+      if (max <= 0) return;
+      e.preventDefault();
+      strip.scrollLeft += e.deltaY;
+    }, { passive: false });
+
     var update = function () {
       var max = strip.scrollWidth - strip.clientWidth;
       var p = max > 0 ? strip.scrollLeft / max : 0;
