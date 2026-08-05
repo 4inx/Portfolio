@@ -8,6 +8,21 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var docEl = document.documentElement;
 
+  /* ---------- work-intro rotator: one piece per wing, crossfading in the
+     gap made by the arms-out photo ---------- */
+  var workRotator = document.getElementById('workRotator');
+  if (workRotator && !reduced) {
+    var rSlides = workRotator.querySelectorAll('.work-rotator-slide');
+    var rIdx = 0;
+    if (rSlides.length > 1) {
+      setInterval(function () {
+        rSlides[rIdx].classList.remove('in');
+        rIdx = (rIdx + 1) % rSlides.length;
+        rSlides[rIdx].classList.add('in');
+      }, 2600);
+    }
+  }
+
   /* ---------- scroll reveal ---------- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
