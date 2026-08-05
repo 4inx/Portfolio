@@ -226,7 +226,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
    he's standing in front of his own name, which is standing in front of
    the room. data-parallax on each layer is read by site.js. */
 .hero {
-  position: relative; min-height: 100svh;
+  position: relative; min-height: 100vh; min-height: 100svh;
   overflow: hidden;
   background:
     radial-gradient(ellipse 70% 55% at 50% 38%, #6b3018 0%, #4a2313 42%, transparent 75%),
@@ -316,7 +316,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 .work-outer { position: relative; }
 .work-sticky { position: relative; }
 .js .work-outer.enhanced .work-sticky {
-  position: sticky; top: 0; height: 100svh;
+  position: sticky; top: 0; height: 100vh; height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
   overflow: hidden;
 }
