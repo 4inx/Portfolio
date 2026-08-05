@@ -67,12 +67,38 @@
     if (!strip || !now) return;
     var leaves = strip.querySelectorAll('.leaf');
     if (total) total.textContent = String(leaves.length).padStart(2, '0');
+
+    /* wrap the strip so hover arrows can center on the images, not the
+       caption/count row below them */
+    var viewport = document.createElement('div');
+    viewport.className = 'strip-viewport';
+    strip.parentNode.insertBefore(viewport, strip);
+    viewport.appendChild(strip);
+
+    var prevBtn = document.createElement('button');
+    prevBtn.type = 'button'; prevBtn.className = 'strip-nav prev';
+    prevBtn.setAttribute('aria-label', 'Scroll back'); prevBtn.textContent = '←';
+    var nextBtn = document.createElement('button');
+    nextBtn.type = 'button'; nextBtn.className = 'strip-nav next';
+    nextBtn.setAttribute('aria-label', 'Scroll forward'); nextBtn.textContent = '→';
+    viewport.appendChild(prevBtn);
+    viewport.appendChild(nextBtn);
+
+    var step = function () {
+      return leaves.length > 1 ? (leaves[1].offsetLeft - leaves[0].offsetLeft) : strip.clientWidth * .8;
+    };
+    prevBtn.addEventListener('click', function () { strip.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    nextBtn.addEventListener('click', function () { strip.scrollBy({ left: step(), behavior: 'smooth' }); });
+
     var update = function () {
       var max = strip.scrollWidth - strip.clientWidth;
       var p = max > 0 ? strip.scrollLeft / max : 0;
       now.textContent = String(1 + Math.round(p * (leaves.length - 1))).padStart(2, '0');
+      prevBtn.disabled = strip.scrollLeft <= 2;
+      nextBtn.disabled = strip.scrollLeft >= max - 2;
     };
     strip.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
     update();
   });
 
