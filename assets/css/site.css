@@ -409,6 +409,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   scrollbar-width: none;
 }
 .strip::-webkit-scrollbar { display: none; }
+.strip.wheeling { scroll-snap-type: none; }
 .strip .leaf { flex: 0 0 auto; scroll-snap-align: center; width: min(74vw, 420px); }
 .strip .leaf.landscape { width: min(84vw, 640px); }
 .strip-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-top: .35rem; }

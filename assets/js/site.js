@@ -91,13 +91,20 @@
     nextBtn.addEventListener('click', function () { strip.scrollBy({ left: step(), behavior: 'smooth' }); });
 
     /* hovering the strip turns the mouse wheel into horizontal scroll,
-       so a plain scroll wheel (not just a trackpad) can flip through it */
+       so a plain scroll wheel (not just a trackpad) can flip through it.
+       scroll-snap fights a plain scrollLeft nudge (it yanks back to the
+       nearest leaf before the next tick lands), so snapping is suspended
+       for the duration of the wheel gesture and restored once it settles. */
+    var wheelSettle;
     viewport.addEventListener('wheel', function (e) {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already-horizontal gesture: let it through
       var max = strip.scrollWidth - strip.clientWidth;
       if (max <= 0) return;
       e.preventDefault();
+      strip.classList.add('wheeling');
       strip.scrollLeft += e.deltaY;
+      clearTimeout(wheelSettle);
+      wheelSettle = setTimeout(function () { strip.classList.remove('wheeling'); }, 150);
     }, { passive: false });
 
     var update = function () {
