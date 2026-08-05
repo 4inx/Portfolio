@@ -234,7 +234,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 /* a little card of the work itself, floating in the gap his arms make —
    percentages are hand-tuned to this specific photo's pose */
 .work-rotator {
-  position: absolute; top: 24%; left: 22%; width: 25%; aspect-ratio: 4 / 5;
+  position: absolute; top: 24%; left: 12%; width: 25%; aspect-ratio: 4 / 5;
   transform: rotate(8deg);
   border-radius: 6px; overflow: hidden;
   border: 2px solid var(--ink); background: var(--sand);
