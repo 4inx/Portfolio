@@ -220,11 +220,13 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   margin-bottom: clamp(2.5rem, 6vh, 4rem);
 }
 
-/* the arms-out photo greeting the work walk — hidden below the breakpoint
-   where there's no real room for it beside the section label */
-.work-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
-.work-intro .rule-head { flex: 1 1 auto; }
-.work-intro-figure-wrap { position: relative; display: none; }
+/* the arms-out photo, presenting a rotating card of the work — tucked in
+   the hero's bottom-right corner (mirroring .hero-card at bottom-left),
+   hidden below the breakpoint where there's no real room for it */
+.work-intro-figure-wrap {
+  position: absolute; z-index: 3; right: clamp(1rem, 4vw, 3rem); bottom: clamp(1.5rem, 4vh, 2.5rem);
+  display: none;
+}
 @media (min-width: 860px) { .work-intro-figure-wrap { display: block; } }
 .work-intro-figure {
   display: block; height: clamp(190px, 21vw, 300px); width: auto;
