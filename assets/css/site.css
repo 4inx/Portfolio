@@ -432,7 +432,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
      its own aspect-ratio (set inline per instance, same as the mini-grid
      tiles) and centered instead, so the box matches the piece. */
   height: clamp(150px, 20vw, 215px);
-  width: auto; margin: 0 auto;
+  width: auto; margin: 0;
 }
 .work-panel-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .work-panel-figure:hover .frame-shell { border-color: var(--clay); }
