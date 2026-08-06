@@ -127,8 +127,15 @@
     prevBtn.addEventListener('click', function () { strip.scrollBy({ left: -step(), behavior: 'smooth' }); });
     nextBtn.addEventListener('click', function () { strip.scrollBy({ left: step(), behavior: 'smooth' }); });
 
-    /* hovering the strip turns the mouse wheel into horizontal scroll,
-       so a plain scroll wheel (not just a trackpad) can flip through it.
+    /* scrolling anywhere near the strip turns the wheel into horizontal
+       scroll, so a plain scroll wheel (not just a trackpad) can flip
+       through it. Listens on the whole exhibit block, not just the
+       tight image strip — gating on the narrow viewport box meant the
+       capture only engaged if the cursor happened to be exactly over
+       the images at the moment a tick fired, which is a much smaller
+       target than a visitor scrolling casually actually hits, so it
+       felt like it "didn't catch" and let whole pieces scroll by
+       uncaptured.
        scroll-snap fights a plain scrollLeft nudge (it yanks back to the
        nearest leaf before the next tick lands), so snapping is suspended
        for the duration of the wheel gesture and restored once it settles.
@@ -136,8 +143,9 @@
        scrolled, the event is left alone (no preventDefault) so it falls
        through to the page's normal vertical scroll — the same release-
        into-vertical feel as the foyer's horizontal work walk. */
+    var wheelZone = shell.closest('section') || viewport;
     var wheelSettle;
-    viewport.addEventListener('wheel', function (e) {
+    wheelZone.addEventListener('wheel', function (e) {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already-horizontal gesture: let it through
       var max = strip.scrollWidth - strip.clientWidth;
       if (max <= 0) return;
@@ -145,7 +153,10 @@
       if (e.deltaY < 0 && strip.scrollLeft <= 1) return; // at the start: let the page scroll back
       e.preventDefault();
       strip.classList.add('wheeling');
-      strip.scrollLeft += e.deltaY;
+      // clamp each tick — an aggressive/notched wheel can otherwise send a
+      // single huge delta that jumps past several pieces at once, which
+      // reads the same as "missing" them
+      strip.scrollLeft += Math.max(-120, Math.min(120, e.deltaY));
       clearTimeout(wheelSettle);
       wheelSettle = setTimeout(function () { strip.classList.remove('wheeling'); }, 150);
     }, { passive: false });
