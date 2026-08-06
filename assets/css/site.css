@@ -282,7 +282,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 /* a little card of the work itself, floating in the gap his arms make —
    percentages are hand-tuned to this specific photo's pose */
 .work-rotator {
-  position: absolute; top: 24%; left: 12%; width: 25%; aspect-ratio: 4 / 5;
+  position: absolute; top: 21%; left: 9%; width: 30%; aspect-ratio: 4 / 5;
   transform: rotate(8deg);
   border-radius: 6px; overflow: hidden;
   border: 2px solid var(--ink); background: var(--sand);
@@ -429,13 +429,18 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 
 /* the foyer teaser, upgraded: three real pieces per wing instead of one
    static image, so a first-time visitor sees actual work with zero
-   clicks — "Enter the wing" is still there for anyone who wants the rest */
-.work-panel-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(.5rem, 1.2vw, .9rem); }
-.work-panel-mini .frame { aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; }
-/* contain, not cover — several of these pieces aren't natively portrait,
-   and cropping them was hiding real content. Letterboxing onto the
-   frame's own sand background reads like a mounted photo mat instead. */
-.work-panel-mini .frame img { width: 100%; height: 100%; max-height: none; object-fit: contain; }
+   clicks — "Enter the wing" is still there for anyone who wants the rest.
+   Each panel sets its own grid-template-columns inline, in fr units equal
+   to that tile's real aspect ratio, and each .frame carries its own
+   inline aspect-ratio to match — so the box is shaped like the actual
+   piece (a landscape thumbnail gets a wide box, a poster gets a narrow
+   one) instead of forcing every shape into the same portrait mat and
+   letterboxing whatever doesn't fit. Because the fr proportions equal
+   the ratios themselves, all three tiles in a row still land on the
+   same height without any of them needing to crop or pad. */
+.work-panel-mini { display: grid; gap: clamp(.5rem, 1.2vw, .9rem); }
+.work-panel-mini .frame { width: 100%; height: auto; }
+.work-panel-mini .frame img { display: block; width: 100%; height: 100%; max-height: none; object-fit: cover; }
 .work-panel-copy .reveal-kicker { display: block; color: var(--clay); font-size: .84rem; letter-spacing: .14em; margin-bottom: .9rem; }
 .work-panel-copy .reveal-heading { font-size: clamp(1.9rem, 4.2vw, 3.1rem); line-height: .96; max-width: 13ch; }
 .work-panel-copy p.voice { font-size: clamp(1rem, 1.4vw, 1.15rem); color: var(--ink); opacity: .8; max-width: 40ch; margin: .9rem 0 0; }
