@@ -372,8 +372,13 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   background: var(--sand);
   transform: perspective(900px) rotateX(0deg) rotateY(0deg);
   transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .3s;
+  /* height matched to the .work-panel-mini tile row (below) — this is now
+     only used by wings with a single real image (Web), and it was
+     dwarfing its three-tile neighbors at the old 60vh ceiling */
+  height: clamp(150px, 20vw, 215px);
+  display: flex; align-items: center; justify-content: center;
 }
-.work-panel-figure img { display: block; width: 100%; height: auto; max-height: 60vh; object-fit: contain; }
+.work-panel-figure img { display: block; width: auto; height: 100%; max-width: 100%; object-fit: contain; }
 .work-panel-figure:hover .frame-shell { border-color: var(--clay); }
 
 /* the foyer teaser, upgraded: three real pieces per wing instead of one
