@@ -407,7 +407,13 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   flex: 0 0 auto; width: min(88vw, 960px); scroll-snap-align: center;
   display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: center;
 }
-@media (min-width: 700px) { .work-panel { grid-template-columns: 1.3fr 1fr; } }
+@media (min-width: 700px) {
+  .work-panel { grid-template-columns: 1.3fr 1fr; }
+  /* the lone single-image panel (Web) no longer fills its column edge to
+     edge now that the box is sized to its own aspect ratio — give it a
+     narrower figure track instead of leaving a wide gap before the copy */
+  .work-panel:has(.frame-shell) { grid-template-columns: .7fr 1.3fr; }
+}
 .work-panel-figure { display: block; text-decoration: none; }
 /* no forced aspect-ratio here on purpose — most of this work is portrait
    (listing decks, Instagram posts); cropping them into a landscape box
