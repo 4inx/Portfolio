@@ -131,12 +131,18 @@
        so a plain scroll wheel (not just a trackpad) can flip through it.
        scroll-snap fights a plain scrollLeft nudge (it yanks back to the
        nearest leaf before the next tick lands), so snapping is suspended
-       for the duration of the wheel gesture and restored once it settles. */
+       for the duration of the wheel gesture and restored once it settles.
+       Once the strip has nowhere further to go in the direction being
+       scrolled, the event is left alone (no preventDefault) so it falls
+       through to the page's normal vertical scroll — the same release-
+       into-vertical feel as the foyer's horizontal work walk. */
     var wheelSettle;
     viewport.addEventListener('wheel', function (e) {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already-horizontal gesture: let it through
       var max = strip.scrollWidth - strip.clientWidth;
       if (max <= 0) return;
+      if (e.deltaY > 0 && strip.scrollLeft >= max - 1) return; // at the end: let the page scroll on
+      if (e.deltaY < 0 && strip.scrollLeft <= 1) return; // at the start: let the page scroll back
       e.preventDefault();
       strip.classList.add('wheeling');
       strip.scrollLeft += e.deltaY;
