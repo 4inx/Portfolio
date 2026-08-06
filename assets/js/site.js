@@ -292,7 +292,7 @@
 
   /* ---------- magnetic pull: the CTA and next-wing links lean in ---------- */
   if (motionOK) {
-    document.querySelectorAll('.btn-primary, .hero-scroll, .wing-next a').forEach(function (el) {
+    document.querySelectorAll('.btn-primary, .wing-next a').forEach(function (el) {
       el.addEventListener('mousemove', function (e) {
         var r = el.getBoundingClientRect();
         var dx = (e.clientX - (r.left + r.width / 2)) * .28;

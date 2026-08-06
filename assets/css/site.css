@@ -94,9 +94,9 @@ a { color: inherit; }
 img, video { max-width: 100%; display: block; }
 
 .label {
-  font-size: .7rem; letter-spacing: .16em; color: var(--mute);
+  font-size: .78rem; letter-spacing: .14em; color: var(--mute);
 }
-.room { font-size: .82rem; letter-spacing: .1em; color: var(--clay); }
+.room { font-size: .88rem; letter-spacing: .1em; color: var(--clay); }
 
 .skip {
   position: absolute; left: -999px; top: 0; z-index: 300;
@@ -155,7 +155,7 @@ img, video { max-width: 100%; display: block; }
 @media (prefers-reduced-motion: reduce) { .frame, .frame-shell { transition: none !important; } }
 
 /* ============ MAGNETIC — the CTA leans toward the cursor ============ */
-.btn-primary, .hero-scroll, .wing-next a {
+.btn-primary, .wing-next a {
   transition: transform .35s cubic-bezier(.2,.7,.2,1), background .25s;
   display: inline-block;
 }
@@ -200,7 +200,7 @@ img, video { max-width: 100%; display: block; }
 .nav .mark i { font-style: normal; color: var(--clay); }
 .nav ul { display: flex; gap: clamp(.8rem, 2.6vw, 2.2rem); list-style: none; flex-wrap: wrap; }
 .nav ul a {
-  font-size: .74rem; letter-spacing: .13em;
+  font-size: .8rem; letter-spacing: .13em;
   text-decoration: none; color: var(--ink); opacity: .75; transition: opacity .25s; position: relative;
 }
 .nav ul a::after {
@@ -264,7 +264,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 .hero-tag {
   position: absolute; z-index: 3; top: clamp(6rem, 13vh, 8.5rem); left: clamp(1.25rem, 5vw, 4rem);
   right: clamp(1.25rem, 5vw, 4rem); max-width: 46ch;
-  font-size: .82rem; letter-spacing: .14em; color: var(--ink); opacity: .85;
+  font-size: .88rem; letter-spacing: .14em; color: var(--ink); opacity: .85;
 }
 .hero-tag .paren { color: var(--clay); }
 
@@ -272,7 +272,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 .hero-side {
   position: absolute; z-index: 3; right: clamp(.75rem, 2.5vw, 2rem); top: 50%;
   transform: translateY(-50%) rotate(90deg); transform-origin: center;
-  font-size: .7rem; letter-spacing: .22em; color: var(--ink); opacity: .55;
+  font-size: .76rem; letter-spacing: .22em; color: var(--ink); opacity: .55;
   white-space: nowrap; display: none;
 }
 @media (min-width: 780px) { .hero-side { display: block; } }
@@ -304,21 +304,18 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   will-change: transform;
 }
 
-/* intro + scroll cue, pinned to the foot of the hero */
+/* intro paragraph, pinned to the foot of the hero — bottom offset sized
+   to clear the hero-card sitting below it, now that the scroll cue that
+   used to occupy that gap is gone */
 .hero-foot {
   position: absolute; z-index: 3; left: clamp(1.25rem, 5vw, 4rem); right: clamp(1.25rem, 5vw, 4rem);
-  bottom: clamp(6.5rem, 15vh, 9.5rem);
+  bottom: clamp(9rem, 18vh, 12.5rem);
 }
 .hero-intro {
   max-width: 46ch;
   font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--ink); opacity: .85;
 }
 .hero-intro b { font-weight: 600; opacity: 1; }
-.hero-scroll {
-  display: inline-block; margin-top: clamp(1.25rem, 3vh, 1.75rem);
-  font-size: .78rem; letter-spacing: .12em; text-decoration: none; color: var(--ink);
-  border-bottom: 1px dashed var(--clay); padding-bottom: .2rem;
-}
 
 /* credit card, lower-left, dashed divider inside */
 .hero-card {
@@ -383,12 +380,15 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
    static image, so a first-time visitor sees actual work with zero
    clicks — "Enter the wing" is still there for anyone who wants the rest */
 .work-panel-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(.5rem, 1.2vw, .9rem); }
-.work-panel-mini .frame { aspect-ratio: 4 / 5; }
-.work-panel-mini .frame img { width: 100%; height: 100%; max-height: none; object-fit: cover; }
-.work-panel-copy .reveal-kicker { display: block; color: var(--clay); font-size: .76rem; letter-spacing: .14em; margin-bottom: .9rem; }
+.work-panel-mini .frame { aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; }
+/* contain, not cover — several of these pieces aren't natively portrait,
+   and cropping them was hiding real content. Letterboxing onto the
+   frame's own sand background reads like a mounted photo mat instead. */
+.work-panel-mini .frame img { width: 100%; height: 100%; max-height: none; object-fit: contain; }
+.work-panel-copy .reveal-kicker { display: block; color: var(--clay); font-size: .84rem; letter-spacing: .14em; margin-bottom: .9rem; }
 .work-panel-copy .reveal-heading { font-size: clamp(1.9rem, 4.2vw, 3.1rem); line-height: .96; max-width: 13ch; }
 .work-panel-copy p.voice { font-size: clamp(1rem, 1.4vw, 1.15rem); color: var(--ink); opacity: .8; max-width: 40ch; margin: .9rem 0 0; }
-.reveal-count { display: inline-block; margin-top: 1.1rem; font-size: .68rem; letter-spacing: .14em; color: var(--mute); }
+.reveal-count { display: inline-block; margin-top: 1.1rem; font-size: .76rem; letter-spacing: .14em; color: var(--mute); }
 
 .work-progress {
   display: flex; align-items: center; gap: clamp(1rem, 3vw, 1.75rem);
@@ -403,7 +403,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 /* ============ WING HERO (subpages) ============ */
 .wing-hero { padding-bottom: clamp(2.5rem, 6vh, 4rem); }
 .crumb { display: flex; gap: .6rem; align-items: baseline; margin-bottom: clamp(1.5rem, 4vh, 2.25rem); }
-.crumb a { font-size: .74rem; letter-spacing: .14em; color: var(--mute); text-decoration: none; }
+.crumb a { font-size: .82rem; letter-spacing: .14em; color: var(--mute); text-decoration: none; }
 .crumb a:hover { color: var(--clay); }
 .crumb .sep { color: var(--clay); }
 .wing-hero h1 { font-size: clamp(2rem, 5.6vw, 4.2rem); line-height: .98; max-width: 16ch; }
@@ -418,7 +418,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   border-top: 1px dashed var(--hair);
 }
 .wing-jump a {
-  font-size: .72rem; letter-spacing: .1em;
+  font-size: .8rem; letter-spacing: .1em;
   text-decoration: none; color: var(--mute);
   padding: .4rem .75rem; border-radius: 999px;
   border: 1px solid transparent;
@@ -481,7 +481,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 .frame .tag {
   position: absolute; left: .75rem; bottom: .75rem;
   background: var(--paper); color: var(--ink);
-  font-size: .64rem; letter-spacing: .13em;
+  font-size: .7rem; letter-spacing: .13em;
   padding: .25rem .6rem; border-radius: 999px; border: 1px solid var(--hair);
   opacity: 0; transition: opacity .3s;
 }
@@ -516,16 +516,16 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 .doc-preview::before {
   content: "PDF — open to read"; position: absolute; inset: 0;
   display: grid; place-items: center;
-  font-size: .7rem; letter-spacing: .16em; color: var(--mute);
+  font-size: .78rem; letter-spacing: .16em; color: var(--mute);
 }
 .doc-preview iframe {
   position: absolute; inset: 0; width: 100%; height: 100%;
   border: 0; pointer-events: none; background: transparent;
 }
-.doc-card .doc-kicker { color: var(--clay); font-size: .68rem; letter-spacing: .16em; }
+.doc-card .doc-kicker { color: var(--clay); font-size: .76rem; letter-spacing: .16em; }
 .doc-card h3 { font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.1; }
 .doc-card p { color: var(--ink); opacity: .78; font-size: .95rem; }
-.doc-card .doc-open { margin-top: .75rem; color: var(--ink); font-size: .72rem; letter-spacing: .14em; }
+.doc-card .doc-open { margin-top: .75rem; color: var(--ink); font-size: .8rem; letter-spacing: .14em; }
 .doc-card .doc-open i { font-style: normal; color: var(--clay); }
 .doc-card .corner {
   position: absolute; top: 0; right: 0; width: 44px; height: 44px;
@@ -554,7 +554,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 @media (prefers-reduced-motion: reduce) { .live-card .pulse::after { animation: none; } }
 .live-card h3 { font-size: clamp(1.2rem, 2.4vw, 1.7rem); }
 .live-card p { color: var(--ink); opacity: .78; font-size: .95rem; }
-.live-card .doc-open { margin-top: .6rem; font-size: .72rem; letter-spacing: .14em; }
+.live-card .doc-open { margin-top: .6rem; font-size: .8rem; letter-spacing: .14em; }
 .live-card .doc-open i { font-style: normal; color: var(--clay); }
 
 /* ============ SCREENING (video wells go one step darker) ============ */
@@ -609,14 +609,14 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
   aspect-ratio: 4 / 5; overflow: hidden; max-width: 420px;
 }
 .portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(.1) sepia(.08) brightness(.85); }
-.portrait-cap { margin-top: .8rem; font-size: .78rem; color: var(--mute); }
+.portrait-cap { margin-top: .8rem; font-size: .84rem; color: var(--mute); }
 
 .about-copy h2 { font-size: clamp(1.7rem, 3.8vw, 2.7rem); line-height: 1.02; margin-bottom: 1.5rem; }
 .about-copy p { margin-bottom: 1.15rem; max-width: 58ch; color: var(--ink); opacity: .82; }
 .about-copy p b { font-weight: 600; opacity: 1; }
 .now-list { margin-top: 2.25rem; border-top: 1px dashed var(--hair); }
 .now-list div { display: grid; grid-template-columns: minmax(90px, 140px) 1fr; gap: 1rem; padding: .8rem 0; border-bottom: 1px dashed var(--hair); }
-.now-list dt { font-size: .7rem; letter-spacing: .16em; color: var(--clay); padding-top: .25em; }
+.now-list dt { font-size: .78rem; letter-spacing: .16em; color: var(--clay); padding-top: .25em; }
 .now-list dd { color: var(--ink); opacity: .78; font-weight: 400; text-transform: none; }
 
 .contact { text-align: center; }
@@ -636,7 +636,7 @@ section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: cl
 
 .socials { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.1rem 2.2rem; margin-top: clamp(2.25rem, 5vh, 3.25rem); }
 .socials a {
-  font-size: .76rem; letter-spacing: .14em;
+  font-size: .84rem; letter-spacing: .14em;
   text-decoration: none; color: var(--mute); transition: color .25s;
   border-bottom: 1px solid transparent;
 }
@@ -671,7 +671,7 @@ dialog.lightbox::backdrop { background: rgba(6, 3, 1, .93); backdrop-filter: blu
   width: 100%; margin-top: 1rem; color: var(--ink);
 }
 .lb-bar .lb-cap { font-size: .9rem; opacity: .8; text-transform: none; font-weight: 400; }
-.lb-bar .lb-count { font-variant-numeric: tabular-nums; font-size: .76rem; letter-spacing: .14em; color: var(--mute); }
+.lb-bar .lb-count { font-variant-numeric: tabular-nums; font-size: .82rem; letter-spacing: .14em; color: var(--mute); }
 .lb-btn {
   position: fixed; top: 50%; transform: translateY(-50%);
   background: rgba(255,237,215,.06); color: var(--ink);
@@ -700,7 +700,7 @@ dialog.lightbox::backdrop { background: rgba(6, 3, 1, .93); backdrop-filter: blu
   border-top: 1px dashed var(--hair);
   padding: 1.4rem clamp(1.25rem, 5vw, 4rem);
   display: flex; flex-wrap: wrap; gap: .5rem 2rem; justify-content: space-between;
-  font-size: .74rem; letter-spacing: .1em; color: var(--mute);
+  font-size: .82rem; letter-spacing: .1em; color: var(--mute);
 }
 .foot i { font-style: normal; color: var(--clay); }
 
