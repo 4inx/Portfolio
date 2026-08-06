@@ -8,6 +8,28 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var docEl = document.documentElement;
 
+  /* ---------- nav "Work" dropdown: quick-jump to any wing ---------- */
+  document.querySelectorAll('.nav-drop').forEach(function (drop) {
+    var toggle = drop.querySelector('.nav-drop-toggle');
+    var menu = drop.querySelector('.nav-drop-menu');
+    if (!toggle || !menu) return;
+    var close = function () {
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      var isOpen = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', function (e) {
+      if (!drop.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+  });
+
   /* ---------- work-intro rotator: one piece per wing, crossfading in the
      gap made by the arms-out photo ---------- */
   var workRotator = document.getElementById('workRotator');

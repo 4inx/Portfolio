@@ -17,7 +17,17 @@
 <nav class="nav" aria-label="Main">
   <a class="mark serif" href="index.html">binx <i>palm</i></a>
   <ul>
-    <li><a href="index.html#work">Work</a></li>
+    <li class="nav-drop">
+      <a href="index.html#work">Work</a><button class="nav-drop-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="workMenu" aria-label="Show wings">▾</button>
+      <ul class="nav-drop-menu" id="workMenu">
+        <li><a href="property.html">Property</a></li>
+        <li><a href="reading.html">Reading</a></li>
+        <li><a href="campaigns.html">Campaigns</a></li>
+        <li><a href="web.html" aria-current="page">Web</a></li>
+        <li><a href="annex.html">Annex</a></li>
+        <li><a href="sketchbook.html">Sketchbook</a></li>
+      </ul>
+    </li>
     <li><a href="index.html#about">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
   </ul>

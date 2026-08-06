@@ -211,6 +211,46 @@ img, video { max-width: 100%; display: block; }
 .nav ul a:hover::after { right: 0; }
 .nav ul a[aria-current="page"] { color: var(--clay); opacity: 1; }
 
+/* "Work" quick-jump — the six wings, one click away from anywhere on the
+   site instead of scrolling back through the foyer's horizontal walk
+   every time. Click-to-toggle works on every device; hover is a bonus
+   shortcut only where a real hover state exists (desktop). */
+.nav-drop { position: relative; display: flex; align-items: center; gap: .25rem; }
+.nav-drop-toggle {
+  background: none; border: none; padding: .2rem; margin: 0; cursor: pointer;
+  font: inherit; font-size: .7rem; color: var(--ink); opacity: .6; line-height: 1;
+  transition: opacity .25s, transform .25s;
+}
+.nav-drop-toggle:hover { opacity: 1; }
+.nav-drop-menu.open ~ .nav-drop-toggle,
+.nav-drop:hover .nav-drop-toggle { opacity: 1; }
+.nav-drop-menu {
+  position: absolute; top: 100%; left: 50%; margin-top: .9rem;
+  transform: translate(-50%, -6px);
+  min-width: 168px; list-style: none; padding: .4rem;
+  background: var(--nav-veil); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--hair); border-radius: 10px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  z-index: 150;
+}
+.nav-drop-menu a {
+  display: block; padding: .6rem .8rem; border-radius: 6px;
+  font-size: .78rem; letter-spacing: .1em; text-decoration: none;
+  color: var(--ink); opacity: .75; transition: background .2s, opacity .2s;
+}
+.nav-drop-menu a::after { display: none; }
+.nav-drop-menu a:hover { background: var(--sand); opacity: 1; }
+.nav-drop-menu a[aria-current="page"] { color: var(--clay); opacity: 1; }
+.nav-drop-menu.open {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0);
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav-drop:hover .nav-drop-menu {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: translate(-50%, 0);
+  }
+}
+
 /* ============ SHARED SCAFFOLD ============ */
 .wrap { max-width: 1180px; margin: 0 auto; padding-left: clamp(1.25rem, 5vw, 4rem); padding-right: clamp(1.25rem, 5vw, 4rem); }
 section, .wing-hero { padding-top: clamp(4.5rem, 11vh, 8rem); padding-bottom: clamp(4.5rem, 11vh, 8rem); }
