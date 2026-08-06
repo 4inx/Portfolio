@@ -53,9 +53,15 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+/* scroll-behavior:smooth intentionally left off html — it fights the
+   wing strips' per-wheel-tick preventDefault(). An uncaptured tick's
+   native scroll would animate on its own momentum instead of stopping
+   where the wheel event ended, so the page kept gliding past a strip
+   before the next tick could re-engage horizontal capture (read as a
+   laggy "catch" that needed the cursor nudged to trigger). Anchor
+   links get their smoothness back explicitly in site.js instead,
+   scoped to just the click rather than every scroll on the page. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
 }
 

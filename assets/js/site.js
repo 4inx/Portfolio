@@ -8,6 +8,20 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var docEl = document.documentElement;
 
+  /* ---------- smooth-scroll for same-page anchor links ----------
+     Replaces the global html{scroll-behavior:smooth} that used to fight
+     the wing strips' wheel hijacking (see site.css) — scoped to just the
+     click instead of every scroll on the page. */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1);
+      var target = id && document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
   /* ---------- nav "Work" dropdown: quick-jump to any wing ---------- */
   document.querySelectorAll('.nav-drop').forEach(function (drop) {
     var toggle = drop.querySelector('.nav-drop-toggle');
