@@ -12,16 +12,23 @@
   document.querySelectorAll('.nav-drop').forEach(function (drop) {
     var toggle = drop.querySelector('.nav-drop-toggle');
     var menu = drop.querySelector('.nav-drop-menu');
+    var label = drop.querySelector(':scope > a');
     if (!toggle || !menu) return;
     var close = function () {
       menu.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
     };
-    toggle.addEventListener('click', function (e) {
+    var flip = function (e) {
       e.preventDefault();
       var isOpen = menu.classList.toggle('open');
       toggle.setAttribute('aria-expanded', String(isOpen));
-    });
+    };
+    toggle.addEventListener('click', flip);
+    /* the "Work" label opens the menu rather than jumping to the foyer's
+       wing preview. On touch that jump was swallowing the first tap, so
+       the menu only appeared if you hit the word twice. The href stays in
+       the markup as the no-JS fallback. */
+    if (label) label.addEventListener('click', flip);
     document.addEventListener('click', function (e) {
       if (!drop.contains(e.target)) close();
     });

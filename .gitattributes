@@ -1,4 +1,6 @@
-*.mov filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.heic filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
+# No Git LFS here, deliberately.
+#
+# GitHub Pages does not resolve LFS objects: it serves the ~130-byte pointer
+# file instead of the asset. Every video and PDF on the live site was arriving
+# as a text stub, so nothing played and no document previewed. Media is
+# committed as ordinary blobs and exported small enough to belong in the repo.
